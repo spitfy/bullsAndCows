@@ -18,10 +18,21 @@ const guessNum = document.getElementById('guessNum');
 const myNum = document.getElementById('myNum');
 const guessNumbers = document.getElementById('guessNumbers');
 const myNumbers = document.getElementById('myNumbers');
-let number;
+
+guessNum.oninput = function () {
+    if (this.value.length > 4) {
+        this.value = this.value.slice(0,4);
+    }
+}
+myNum.oninput = function () {
+    if (this.value.length > 4) {
+        this.value = this.value.slice(0,4);
+    }
+}
 sendBtn.addEventListener('click', function() {
     if (checkUnique(guessNum.value.split(''))) {
         socket.emit('request', guessNum.value);
+        guessNum.value = '';
         guessNum.classList.remove('warning');
     } else {
         guessNum.classList.add('warning');
@@ -30,8 +41,8 @@ sendBtn.addEventListener('click', function() {
 setBtn.addEventListener('click', function() {
     if (checkUnique(myNum.value.split(''))) {
         socket.emit('init', myNum.value);
-        setBtn.setAttribute('disabled', true);
-        myNum.setAttribute('disabled', true);
+        setBtn.disabled = true;
+        myNum.disabled = true;
         myNum.classList.remove('warning');
     } else {
         myNum.classList.add('warning');
@@ -39,11 +50,30 @@ setBtn.addEventListener('click', function() {
 });
 
 socket.on('response', function(data) {
-    console.log(data);
+    if (data.start) { console.log(data);
+        if (data.id != socketId) {
+            sendBtn.disabled = true;
+        }
+        return;
+    }
     if (data.id == socketId) {
         guessNumbers.innerHTML += data.num + ' - ' + ((+data.bulls + +data.cows) > 0 ? data.bulls + 'Б ' + data.cows + 'К' : 'пусто') + '<br/>';
+
+        if (!data.win) {
+            sendBtn.disabled = true;
+        } else {
+            sendBtn.disabled = false;
+        }
+        if (data.bulls == 4) {
+            guessNumbers.innerHTML += 'Победа!<br/>';
+        }
     } else {
         myNumbers.innerHTML += data.num + ' - ' + ((+data.bulls + +data.cows) > 0 ? data.bulls + 'Б ' + data.cows + 'К' : 'пусто') + '<br/>';
+        sendBtn.disabled = false;
+
+        if (data.bulls == 4) {
+            myNumbers.innerHTML += 'Поражение!<br/>';
+        }
     }
 });
 
@@ -54,8 +84,9 @@ const checkUnique = (array) => {
     return array.length === unique.length;
 }
 
-
+/*
 socket.emit('new player');
 setInterval(function() {
     socket.emit('movement', movement);
 }, 1000 / 60);
+ */

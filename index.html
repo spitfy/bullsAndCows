@@ -1,18 +1,23 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>Быки коровы</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
             font-family: "Comic Sans MS";
+            background: #282b2b;
         }
         .numbers {
             max-width: 174px;
             font-size: 23px;
             padding: 2px 5px;
+            color: #d8c2c2;
         }
         .btn {
             background-color: lightskyblue;
-            color: white;
+            color: #f5f5f5;
             font-size: 20px;
             border: none;
             padding: 5px;
@@ -30,6 +35,8 @@
             border-radius: 5px 0 0 5px;
             width: 68px;
             font-family: "Comic Sans MS";
+            background: #282b2b;
+            color: white;
         }
         .main {
             display: flex;
@@ -52,14 +59,14 @@
 <div class="main">
     <div class="area">
         <div class="btn-wrapper">
-            <input type="text" class="message" id="guessNum" maxlength="4">
+            <input type="number" class="message" id="guessNum" maxlength="4" min="1" max="4">
             <button class="btn" id="sendBtn">Отправить</button>
         </div>
         <div class="numbers" id="guessNumbers"></div>
     </div>
     <div class="area">
         <div class="btn-wrapper">
-            <input type="text" class="message" id="myNum" maxlength="4">
+            <input type="number" class="message" id="myNum" min="1" max="9999">
             <button class="btn" id="setBtn">Загадать</button>
         </div>
         <div class="numbers" id="myNumbers"></div>

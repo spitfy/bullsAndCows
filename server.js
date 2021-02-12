@@ -28,16 +28,16 @@ server.listen(5000, function() {
 var players = {};
 let request;
 let isFirst = true;
-let cnt = 1;
+let win = false;
 io.on('connection', function(socket) {
     //console.log('socket.id', socket.id);
     socket.on('init', function(num) {
         players[socket.id] = {
-            num: num,
-            go: isFirst
+            num: num
         };
+        if (!isFirst) return;
+        io.sockets.emit('response', {id: socket.id, start: true});
         isFirst = false;
-        console.log('players', players);
     });
 
     socket.on('request', function(data) {
@@ -58,16 +58,17 @@ io.on('connection', function(socket) {
             }
             cows = cows - bulls;
             if (bulls === 4) {
-
+                win = true;
             }
         }
-        const request = {
+        const response = {
             id: socket.id,
             cows: cows,
             bulls: bulls,
-            num: data
+            num: data,
+            win: win
         };
-        io.sockets.emit('response', request);
+        io.sockets.emit('response', response);
     });
 });
 /*
