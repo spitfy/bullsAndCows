@@ -1,0 +1,58 @@
+<html>
+<head>
+    <title>Наша многопользовательская игра</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS";
+        }
+        .numbers {
+            max-width: 174px;
+            font-size: 23px;
+            padding: 2px 5px;
+        }
+        .btn {
+            background-color: lightskyblue;
+            color: white;
+            font-size: 20px;
+            border: none;
+            padding: 5px;
+            border-radius: 0 7px 7px 0;
+            cursor: pointer;
+        }
+        .btn:disabled {
+            background-color: #5d5b5b;
+            cursor:no-drop;
+        }
+        .message {
+            font-size: 21px;
+            border: 1px solid lightskyblue;
+            padding: 3px 6px;
+            border-radius: 5px 0 0 5px;
+            width: 68px;
+            font-family: "Comic Sans MS";
+        }
+        .btns {
+            display: flex;
+        }
+        .btn-wrapper {
+            margin: 5px;
+            display: flex;
+        }
+    </style>
+
+</head>
+<body>
+<div class="btns">
+    <div class="btn-wrapper">
+        <input type="text" class="message" id="guessNum" maxlength="4"> <button class="btn" id="sendBtn">Отправить</button>
+    </div>
+    <div class="btn-wrapper">
+        <input type="text" class="message" id="myNum" maxlength="4"> <button class="btn" id="setBtn">Загадать</button>
+    </div>
+</div>
+<div class="numbers" id="numbers"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+</body>
+<script src="/static/game.js"></script>
+</html>
