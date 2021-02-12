@@ -27,36 +27,52 @@ server.listen(5000, function() {
 */
 var players = {};
 let request;
+let isFirst = true;
+let cnt = 1;
 io.on('connection', function(socket) {
-    console.log('socket.id', socket.id);
-    socket.on('new player', function() {
+    //console.log('socket.id', socket.id);
+    socket.on('init', function(num) {
         players[socket.id] = {
-            x: 300,
-            y: 300
+            num: num,
+            go: isFirst
         };
+        isFirst = false;
+        console.log('players', players);
     });
+
     socket.on('request', function(data) {
-        request = data;
-        console.log(data);
-        io.sockets.emit('response', socket.id);
-        console.log('socket.id', socket.id);
-    });
-    socket.on('movement', function(data) {
-        var player = players[socket.id] || {};
-        if (data.left) {
-            player.x -= 5;
+        const letters = data.split('');
+        let guess;
+        let cows = 0;
+        let bulls = 0;
+        for (let player in players) {
+            if (player == socket.id) continue;
+            guess = players[player].num.split('');
+            for (let i = 0; i < letters.length; i++) {
+                if (guess.includes(letters[i])) {
+                    cows++;
+                }
+                if (guess[i] == letters[i]) {
+                    bulls++;
+                }
+            }
+            cows = cows - bulls;
+            if (bulls === 4) {
+
+            }
         }
-        if (data.up) {
-            player.y -= 5;
-        }
-        if (data.right) {
-            player.x += 5;
-        }
-        if (data.down) {
-            player.y += 5;
-        }
+        const request = {
+            id: socket.id,
+            cows: cows,
+            bulls: bulls,
+            num: data
+        };
+        io.sockets.emit('response', request);
     });
 });
+/*
 setInterval(function() {
     io.sockets.emit('response', request);
 }, 1000);
+
+ */

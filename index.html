@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Наша многопользовательская игра</title>
+    <title>Быки коровы</title>
     <style>
         body {
             font-family: "Comic Sans MS";
@@ -31,26 +31,41 @@
             width: 68px;
             font-family: "Comic Sans MS";
         }
-        .btns {
+        .main {
             display: flex;
         }
         .btn-wrapper {
             margin: 5px;
             display: flex;
         }
+        .warning {
+            color: #ff0000;
+        }
+        #myNumbers {
+            font-size: 18px;
+            color: #b3b3b3;
+        }
     </style>
 
 </head>
 <body>
-<div class="btns">
-    <div class="btn-wrapper">
-        <input type="text" class="message" id="guessNum" maxlength="4"> <button class="btn" id="sendBtn">Отправить</button>
+<div class="main">
+    <div class="area">
+        <div class="btn-wrapper">
+            <input type="text" class="message" id="guessNum" maxlength="4">
+            <button class="btn" id="sendBtn">Отправить</button>
+        </div>
+        <div class="numbers" id="guessNumbers"></div>
     </div>
-    <div class="btn-wrapper">
-        <input type="text" class="message" id="myNum" maxlength="4"> <button class="btn" id="setBtn">Загадать</button>
+    <div class="area">
+        <div class="btn-wrapper">
+            <input type="text" class="message" id="myNum" maxlength="4">
+            <button class="btn" id="setBtn">Загадать</button>
+        </div>
+        <div class="numbers" id="myNumbers"></div>
     </div>
 </div>
-<div class="numbers" id="numbers"></div>
+
 
 <script src="/socket.io/socket.io.js"></script>
 </body>
