@@ -1,19 +1,14 @@
 var socket = io();
 let socketId;
+
 socket.on('connect', function() {
     socketId = socket.id;
     console.log(socket.id);
 });
 
-
-var movement = {
-    up: false,
-    down: false,
-    left: false,
-    right: false
-}
 const sendBtn = document.getElementById('sendBtn');
 const setBtn = document.getElementById('setBtn');
+const resetBtn = document.getElementById('resetBtn');
 const guessNum = document.getElementById('guessNum');
 const myNum = document.getElementById('myNum');
 const guessNumbers = document.getElementById('guessNumbers');
@@ -29,6 +24,9 @@ myNum.oninput = function () {
         this.value = this.value.slice(0,4);
     }
 }
+resetBtn.addEventListener('click', function() {
+    socket.emit('restart', true);
+});
 sendBtn.addEventListener('click', function() {
     if (checkUnique(guessNum.value.split(''))) {
         socket.emit('request', guessNum.value);
@@ -48,7 +46,6 @@ setBtn.addEventListener('click', function() {
         myNum.classList.add('warning');
     }
 });
-
 socket.on('response', function(data) {
     if (data.start) { console.log(data);
         if (data.id != socketId) {
@@ -66,6 +63,7 @@ socket.on('response', function(data) {
         }
         if (data.bulls == 4) {
             guessNumbers.innerHTML += 'Победа!<br/>';
+            resetBtn.style.display = 'block';
         }
     } else {
         myNumbers.innerHTML += data.num + ' - ' + ((+data.bulls + +data.cows) > 0 ? data.bulls + 'Б ' + data.cows + 'К' : 'пусто') + '<br/>';
@@ -76,6 +74,14 @@ socket.on('response', function(data) {
         }
     }
 });
+socket.on('reset', function() {
+    resetBtn.style.display = 'none';
+    setBtn.disabled = false;
+    myNum.disabled = false;
+    guessNumbers.innerHTML = '';
+    myNumbers.innerHTML = '';
+    myNum.value = '';
+});
 
 const checkUnique = (array) => {
     var unique = array.filter((value, index, self) => {
@@ -83,10 +89,3 @@ const checkUnique = (array) => {
     });
     return array.length === unique.length;
 }
-
-/*
-socket.emit('new player');
-setInterval(function() {
-    socket.emit('movement', movement);
-}, 1000 / 60);
- */

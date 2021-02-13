@@ -70,6 +70,15 @@ io.on('connection', function(socket) {
         };
         io.sockets.emit('response', response);
     });
+    socket.on('restart', function() {
+        for (let player in players) {
+            players[player] = {
+                num: 0
+            };
+        }
+        io.sockets.emit('reset', {id: socket.id, start: true});
+        isFirst = true;
+    });
 });
 /*
 setInterval(function() {
